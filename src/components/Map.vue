@@ -7,7 +7,7 @@
 <script>
 import Vue from 'vue'
 import L from 'leaflet';
-import vectorGrid from 'leaflet.vectorgrid';
+import 'leaflet.vectorgrid';
 import eventsBinder from '../utils/eventsBinder.js';
 import propsBinder from '../utils/propsBinder.js';
 

@@ -1,5 +1,5 @@
 {
-  "name": "vue2-leaflet",
+  "name": "is-vue2-leaflet",
   "version": "0.0.50",
   "description": "Vue2 leaflet library",
   "author": "Mickael Bouchaud",
@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "leaflet": "^1.0.1",
+    "leaflet.vectorgrid": "^1.2.0",
     "vue": "^2.0.0-rc.8"
   },
   "keywords": [
@@ -34,5 +35,13 @@
     "vue-template-compiler": "^2.2.3",
     "webpack": "^2.2.0",
     "webpack-node-externals": "^1.5.4"
+  },
+  "bugs": {
+    "url": "https://github.com/KoRiGaN/Vue2Leaflet/issues"
+  },
+  "homepage": "https://github.com/KoRiGaN/Vue2Leaflet#readme",
+  "directories": {
+    "doc": "docs",
+    "example": "examples"
   }
 }

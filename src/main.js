@@ -7,6 +7,7 @@ exports.Marker = require('./components/Marker');
 exports.Polygon = require('./components/Polygon');
 exports.Polyline = require('./components/Polyline');
 exports.Popup = require('./components/Popup');
+exports.Protobuf = require('./components/Protobuf');
 exports.Rectangle = require('./components/Rectangle');
 exports.TileLayer = require('./components/TileLayer');
 exports.Tooltip = require('./components/Tooltip');

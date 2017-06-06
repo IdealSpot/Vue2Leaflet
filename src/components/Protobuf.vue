@@ -54,6 +54,7 @@ const props = {
   },
   params: {
     type: Object,
+    custom: true,
     default: function() {
       return {};
     }
@@ -89,8 +90,24 @@ export default {
       setInteractive(val) {
         this.params.interactive = val;
       },
+      setParams(val) {
+        if (newVal == oldVal) return;
+        if (this.mapObject) {
+          if (newVal) {
+            this.parent.removeLayer(this.mapObject);
+            this.mapObject = null;
+            this.mapObject = L.vectorGrid.protobuf(this.url, this.params);
+            this.mapObject.addTo(this.parent);
+          }
+        }
+      },
       setRestyle(val) {
         if (!val || !this.styleFunction) return;
+        this.styleFunction(this.mapObject);
+        this.$emit('l-restyled', true);
+      },
+      setStyleFunction(val) {
+        if (!val) return;
         this.styleFunction(this.mapObject);
         this.$emit('l-restyled', true);
       }

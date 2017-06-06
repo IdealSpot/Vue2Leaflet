@@ -28,7 +28,7 @@ export default {
     mounted() {
       if (this.attribution) this.params['attribution'] = this.attribution;
       if (this.token) this.params['token'] = this.token;
-      this.mapObject = L.vectorTile.Protobuf(this.url, this.params);
+      this.mapObject = L.vectorGrid.protobuf(this.url, this.params);
       propsBinder(this, this.mapObject, props);
     },
     methods: {

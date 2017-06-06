@@ -3,7 +3,29 @@
 
 <script>
 
+import eventsBinder from '../utils/eventsBinder.js';
 import propsBinder from '../utils/propsBinder.js';
+
+const events = [
+  'click',
+  'dblclick',
+  'mousedown',
+  'mouseover',
+  'mouseout',
+  'contextmenu',
+  'loading',
+  'tileunload',
+  'tileloadstart',
+  'tileerror',
+  'tileload',
+  'load',
+  'add',
+  'remove',
+  'popupopen',
+  'popupclose',
+  'tooltipopen',
+  'tooltipclose'
+]
 
 const props = {
   url: String,
@@ -13,6 +35,21 @@ const props = {
   },
   token: {
     type: String,
+    custom: true
+  },
+  interactive: {
+    type: Boolean,
+    custom: true,
+    default: function() {
+      return false;
+    }
+  },
+  restyle: {
+    type: Boolean,
+    custom: true
+  },
+  styleFunction: {
+    type: Function,
     custom: true
   },
   params: {
@@ -28,7 +65,9 @@ export default {
     mounted() {
       if (this.attribution) this.params['attribution'] = this.attribution;
       if (this.token) this.params['token'] = this.token;
+      this.params['interactive'] = this.interactive;
       this.mapObject = L.vectorGrid.protobuf(this.url, this.params);
+      eventsBinder(this, this.mapObject, events);
       propsBinder(this, this.mapObject, props);
     },
     methods: {
@@ -46,6 +85,14 @@ export default {
       },
       setToken(val) {
         this.params.token = val;
+      },
+      setInteractive(val) {
+        this.params.interactive = val;
+      },
+      setRestyle(val) {
+        if (!val || !this.styleFunction) return;
+        this.styleFunction(this.mapObject);
+        this.$emit('l-restyled', true);
       }
     }
 };

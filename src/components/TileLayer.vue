@@ -17,6 +17,7 @@ const props = {
   },
   params: {
     type: Object,
+    custom: true,
     default: function() {
       return {};
     }
@@ -46,6 +47,11 @@ export default {
       },
       setToken(val) {
         this.params.token = val;
+      },
+      setParams(val) {
+        let { opacity, zIndex } = val
+        if (opacity) { this.mapObject.setOpacity(opacity) }
+        if (zIndex) { this.mapObject.setZIndex(zIndex) }
       }
     }
 };

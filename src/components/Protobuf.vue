@@ -44,6 +44,11 @@ const props = {
       return false;
     }
   },
+  visible: {
+    type: Boolean,
+    custom: true,
+    default: true,
+  },
   restyle: {
     type: Boolean,
     custom: true
@@ -62,55 +67,68 @@ const props = {
 };
 
 export default {
-    props: props,
-    mounted() {
-      if (this.attribution) this.params['attribution'] = this.attribution;
-      if (this.token) this.params['token'] = this.token;
-      this.params['interactive'] = this.interactive;
-      this.mapObject = L.vectorGrid.protobuf(this.url, this.params);
-      eventsBinder(this, this.mapObject, events);
-      propsBinder(this, this.mapObject, props);
+  props: props,
+  mounted() {
+    if (this.attribution) this.params['attribution'] = this.attribution;
+    if (this.token) this.params['token'] = this.token;
+    this.params['interactive'] = this.interactive;
+    this.mapObject = L.vectorGrid.protobuf(this.url, this.params);
+    eventsBinder(this, this.mapObject, events);
+    propsBinder(this, this.mapObject, props);
+  },
+  beforeDestroy() {
+    this.setVisible(false);
+  },
+  methods: {
+    deferredMountedTo(parent) {
+      this.mapObject.addTo(parent);
+      this.attributionControl = parent.attributionControl;
+      var that = this.mapObject;
+      for (var i = 0; i < this.$children.length; i++) {
+        this.$children[i].deferredMountedTo(that);
+      }
     },
-    methods: {
-      deferredMountedTo(parent) {
-        this.mapObject.addTo(parent);
-        this.attributionControl = parent.attributionControl;
-        var that = this.mapObject;
-        for (var i = 0; i < this.$children.length; i++) {
-          this.$children[i].deferredMountedTo(that);
+    setAttribution(val, old) {
+      this.attributionControl.removeAttribution(old);
+      this.attributionControl.addAttribution(val);
+    },
+    setToken(val) {
+      this.params.token = val;
+    },
+    setInteractive(val) {
+      this.params.interactive = val;
+    },
+    setParams(val) {
+      if (newVal == oldVal) return;
+      if (this.mapObject) {
+        if (newVal) {
+          this.parent.removeLayer(this.mapObject);
+          this.mapObject = null;
+          this.mapObject = L.vectorGrid.protobuf(this.url, this.params);
+          this.mapObject.addTo(this.parent);
         }
-      },
-      setAttribution(val, old) {
-        this.attributionControl.removeAttribution(old);
-        this.attributionControl.addAttribution(val);
-      },
-      setToken(val) {
-        this.params.token = val;
-      },
-      setInteractive(val) {
-        this.params.interactive = val;
-      },
-      setParams(val) {
-        if (newVal == oldVal) return;
-        if (this.mapObject) {
-          if (newVal) {
-            this.parent.removeLayer(this.mapObject);
-            this.mapObject = null;
-            this.mapObject = L.vectorGrid.protobuf(this.url, this.params);
-            this.mapObject.addTo(this.parent);
-          }
+      }
+    },
+    setRestyle(val) {
+      if (!val || !this.styleFunction) return;
+      this.styleFunction(this.mapObject);
+      this.$emit('l-restyled', true);
+    },
+    setStyleFunction(val) {
+      if (!val) return;
+      this.styleFunction(this.mapObject);
+      this.$emit('l-restyled', true);
+    },
+    setVisible(newVal, oldVal) {
+      if (newVal == oldVal) return;
+      if (this.mapObject) {
+        if (newVal) {
+          this.mapObject.addTo(this.parent);
+        } else {
+          this.parent.removeLayer(this.mapObject);
         }
-      },
-      setRestyle(val) {
-        if (!val || !this.styleFunction) return;
-        this.styleFunction(this.mapObject);
-        this.$emit('l-restyled', true);
-      },
-      setStyleFunction(val) {
-        if (!val) return;
-        this.styleFunction(this.mapObject);
-        this.$emit('l-restyled', true);
       }
     }
+  }
 };
 </script>

@@ -1,6 +1,6 @@
 {
   "name": "is-vue2-leaflet",
-  "version": "0.0.59",
+  "version": "0.0.6",
   "description": "Vue2 leaflet library",
   "author": "Mickael Bouchaud",
   "license": "MIT",

@@ -95,6 +95,9 @@ export default {
           this.parent.removeLayer(this.mapObject);
         }
       }
+    },
+    setOptions(newVal, oldVal) {
+      return
     }
   }
 };

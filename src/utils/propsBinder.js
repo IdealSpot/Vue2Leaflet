@@ -10,18 +10,20 @@ export default (vueElement, leafletElement, props, options) => {
     const deepValue = (props[key].type === Object) ||
       (props[key].type === Array) ||
       (Array.isArray(props[key].type));
-    if (props[key].custom) {
-      vueElement.$watch(key, (newVal, oldVal) => {
-        vueElement[setMethodName](newVal, oldVal);
-      }, {
-        deep: deepValue
-      });
-    } else {
-      vueElement.$watch(key, (newVal, oldVal) => {
-        leafletElement[setMethodName](newVal);
-      }, {
-        deep: deepValue
-      });
+    if (vueElement[setMethodName]) {
+      if (props[key].custom) {
+        vueElement.$watch(key, (newVal, oldVal) => {
+          vueElement[setMethodName](newVal, oldVal);
+        }, {
+          deep: deepValue
+        });
+      } else {
+        vueElement.$watch(key, (newVal, oldVal) => {
+          leafletElement[setMethodName](newVal);
+        }, {
+          deep: deepValue
+        });
+      }
     }
   }
 }
